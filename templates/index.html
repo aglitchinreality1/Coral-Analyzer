@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coral Reef</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg menu" data-aos="fade-down" data-aos-duration="1200">
+        <div class="container-fluid">
+          <a class="navbar-brand brand" href="#"><img style="height: 50px; width: auto;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
+          <button class="navbar-toggler open" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <button class="nav-link active b" aria-current="page" href="#" data-img-src="{{ url_for('static', filename='images/first.png') }}" onclick="changeText('headtext', 'Our Home - Explore the Big Blue!'), fadeInImage('myImage', this.dataset.imgSrc),changeText('paras', homepara)">Our Home</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link active b" aria-current="page" href="#" data-img-src="{{ url_for('static', filename='images/second.png') }}" onclick="changeText('headtext', 'Analyse Bleach - Let AI do it!'), fadeInImage('myImage', this.dataset.imgSrc),changeText('paras',mlpara)">Analyse Bleach</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link active b" aria-current="page" href="#" data-img-src="{{ url_for('static', filename='images/third.png') }}" onclick="changeText('headtext', 'Wiki Data - Corals of our Oceans!'), fadeInImage('myImage', this.dataset.imgSrc),changeText('paras',geopara)">Wiki Links</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link active b" aria-current="page" href="#" data-img-src="{{ url_for('static', filename='images/logo.png') }}" onclick="changeText('headtext', 'About Us - Know the Motto!'), fadeInImage('myImage', this.dataset.imgSrc),changeText('paras',aboutpara)">About Us</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="container-fluid box">
+        <div class="row1 row">
+          <div class="col-12 heading" data-aos="zoom-out" data-aos-duration="1200"><div class="fading slide-left headc text" id="headtext">Our Home - Explore the Big Blue!</div></div>
+          <div class="col-12 col-sm-4 info" data-aos="fade-right" data-aos-duration="1200"><div class="icontent col-12"><div class="fading infohead col-12" id="infohead"><img class="col-12 fading image" id="myImage" src="{{ url_for('static', filename='images/first.png') }}" style="height: 120px; width: auto;"></div><div class="col-12 paras fading" id="paras">
+            this is where paras are displayed
+            </div></div></div>
+          <div class="col-12 col-sm-8 controls" data-aos="fade-left" data-aos-duration="1200">
+            <div class="ccontent col-12 row">
+              <div class="detecthead">Analyse Coral Health</div>
+              <div class="input col-12 col-sm-6">
+                <img class="process col-5" src="{{ url_for('static', filename='images/process.png') }}">
+                <form class="f col-7" action="/predict" method="POST" enctype="multipart/form-data">
+                  <div class="file-drop-area" id="file-drop-area">
+                    <p id="placeholder-text">Drag & drop your image here or click to upload</p>
+                    <input type="file" name="image" class="inputfile" id="file-input" accept="image/*">
+                    <div class="file-name" id="file-name"></div>
+                  </div>
+                  <button class="sub" type="submit">Upload</button>
+                </form>
+              </div>
+              <div class="output col-12 col-sm-6" id="output">
+                <img class="displayimage col-5" src="{{ url_for('static', filename='images/uploadimg.png') }}">
+                <div class="dispimg col-7" id="display-div">Your image will appear here</div>
+              </div>
+              <div class="final row">
+                <div class="prediction row col-lg-4 col-12">
+                  <div class="pred col-12" id="pred">
+                      {% if class_name %}
+                          {{ class_name }}
+                      {% else %}
+                          PREDICT
+                      {% endif %}
+                  </div>
+                  <div class="score col-12" id="score">
+                      {% if score_value %}
+                          {{ score_value }}%
+                      {% else %}
+                          0%
+                      {% endif %}
+                  </div>
+              </div>
+              
+                <div class="suggest col-lg-8 col-12">
+                  <div class="finalpara">
+                    {% if class_name == 'healthy' %}
+                        <p>Yay! The corals are healthy. Healthy corals are vibrant and robust, playing a crucial role in marine ecosystems. They provide habitat and shelter for various marine species and help maintain the balance of the oceanic environment.</p>
+                    {% elif class_name == 'bleached' %}
+                        <p>Oops, the corals are bleaching. Coral bleaching occurs when corals lose their vibrant colors and turn white due to stress from environmental factors such as temperature changes, pollution, or disease. To help, reduce local stressors, protect marine areas, and support coral restoration initiatives.</p>
+                    {% else %}
+                        <p>Waiting for the machine learning model to provide results. This ML model classifies corals into healthy and bleached categories to assist in monitoring and protecting coral reefs.</p>
+                    {% endif %}
+
+                  </div>
+                </div>
+              </div>            
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+      <script src="../static/js/script.js"></script>
+      <script>
+        AOS.init();
+      </script>
+</body>
+</html>
